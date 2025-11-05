@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    container_name: pro_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=${MONGO_URL}
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: pro_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always

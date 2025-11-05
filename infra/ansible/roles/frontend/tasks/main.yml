@@ -1,0 +1,20 @@
+---
+- name: 🧹 Stop old frontend container if running
+  command: docker stop pro_frontend
+  ignore_errors: yes
+
+- name: 🔄 Remove old frontend container
+  command: docker rm pro_frontend
+  ignore_errors: yes
+
+- name: 🧱 Build frontend Docker image
+  command: docker build -t pro_frontend:latest ./frontend
+  args:
+    chdir: "{{ project_root }}"
+
+- name: 🚀 Run frontend container
+  command: >
+    docker run -d --name pro_frontend
+    -p 3000:3000
+    --link pro_backend
+    pro_frontend:latest

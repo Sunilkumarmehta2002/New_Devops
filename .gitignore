@@ -1,0 +1,113 @@
+# ============================
+# 🧩 GLOBAL SETTINGS
+# ============================
+
+# Ignore OS system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code config
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# ============================
+# 🧱 FRONTEND / BACKEND
+# ============================
+
+# Node modules
+node_modules/
+bower_components/
+
+# Build artifacts
+dist/
+build/
+.cache/
+.next/
+out/
+coverage/
+
+# Dependency lock files (optional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================
+# ⚙️ TERRAFORM
+# ============================
+
+# Local .terraform directories
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+terraform.tfstate*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# ============================
+# ⚙️ ANSIBLE
+# ============================
+
+# Ansible temporary files
+*.retry
+*.bak
+*.tmp
+
+# ============================
+# 🐳 DOCKER
+# ============================
+
+# Docker build cache and intermediate files
+**/Dockerfile~
+**/docker-compose.override.yml
+**/docker-compose.prod.yml
+.docker/
+docker-data/
+
+# ============================
+# 🧰 CI/CD and Local Configs
+# ============================
+
+# Ignore shell history or temporary scripts
+*.sh~
+*.swp
+*.swo
+
+# GitHub Action cache or temp files (optional)
+.github/workflows/*.tmp
+.github/actions/*tmp*
+
+# ============================
+# 🔐 SECURITY
+# ============================
+
+# Private keys or certificates
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.der
+
+# Backup or dump files
+*.bak
+*.sql
+*.sqlite
+*.db

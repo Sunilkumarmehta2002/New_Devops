@@ -1,0 +1,30 @@
+- name: Deploy Pro-vertos using Docker
+  hosts: local
+  tasks:
+    - name: 🧹 Stop old backend container if running
+      command: docker stop pro_backend
+      ignore_errors: yes
+
+    - name: 🔄 Remove old backend container
+      command: docker rm pro_backend
+      ignore_errors: yes
+
+    - name: 🧱 Build backend Docker image
+      command: docker build -t pro_backend:latest ../../backend
+
+    - name: 🚀 Run backend container
+      command: docker run -d --name pro_backend -p 5000:5000 -e MONGO_URI={{ lookup('env', 'MONGO_URI') }} pro_backend:latest
+
+    - name: 🧹 Stop old frontend container if running
+      command: docker stop pro_frontend
+      ignore_errors: yes
+
+    - name: 🔄 Remove old frontend container
+      command: docker rm pro_frontend
+      ignore_errors: yes
+
+    - name: 🧱 Build frontend Docker image
+      command: docker build -t pro_frontend:latest ../../frontend
+
+    - name: 🚀 Run frontend container
+      command: docker run -d --name pro_frontend -p 3000:3000 pro_frontend:latest
