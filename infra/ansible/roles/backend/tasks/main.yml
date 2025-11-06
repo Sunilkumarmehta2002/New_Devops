@@ -1,20 +1,20 @@
 ---
 - name: 🧹 Stop old backend container if running
-  command: docker stop pro_backend
+  command: docker stop provertos_backend
   ignore_errors: yes
 
 - name: 🔄 Remove old backend container
-  command: docker rm pro_backend
+  command: docker rm provertos_backend
   ignore_errors: yes
 
 - name: 🧱 Build backend Docker image
-  command: docker build -t pro_backend:latest ./backend
+  command: docker build -t provertos_backend:latest ./backend
   args:
     chdir: "{{ project_root }}"
 
 - name: 🚀 Run backend container
   command: >
-    docker run -d --name pro_backend
+    docker run -d --name provertos_backend
     -p 5000:5000
     -e MONGO_URL={{ lookup('env', 'MONGO_URL') }}
-    pro_backend:latest
+    provertos_backend:latest

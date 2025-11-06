@@ -4,7 +4,7 @@
 
 
 resource "docker_container" "backend" {
-  name  = "pro_backend"
+  name  = "provertos_backend"
   image = docker_image.backend.name
   ports {
     internal = 5000
@@ -16,7 +16,7 @@ resource "docker_container" "backend" {
 }
 
 resource "docker_container" "frontend" {
-  name  = "pro_frontend"
+  name  = "provertos_frontend"
   image = docker_image.frontend.name
   ports {
     internal = 3000
@@ -27,7 +27,7 @@ resource "docker_container" "frontend" {
 
 
 resource "docker_image" "backend" {
-  name = "pro_backend:latest"
+  name = "provertos_backend:latest"
   build {
     context    = "./../../backend"
     dockerfile = "Dockerfile"
@@ -36,7 +36,7 @@ resource "docker_image" "backend" {
 
 
 resource "docker_image" "frontend" {
-  name = "pro_frontend:latest"
+  name = "provertos_frontend:latest"
   build {
     context    = "./../../frontend"
     dockerfile = "Dockerfile"
