@@ -1,29 +1,7 @@
-terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0.0"
-    }
-  }
-}
+# main.tf
 
-provider "docker" {}
 
-# Pull Docker images (if already pushed to Docker Hub)
-# If not yet, you can also build from local Dockerfiles using Ansible
-resource "docker_image" "backend" {
-  name = "pro_backend:latest"
-  build {
-    context = "${path.module}/../../backend"
-  }
-}
 
-resource "docker_image" "frontend" {
-  name = "pro_frontend:latest"
-  build {
-    context = "${path.module}/../../frontend"
-  }
-}
 
 resource "docker_container" "backend" {
   name  = "pro_backend"
@@ -33,7 +11,7 @@ resource "docker_container" "backend" {
     external = 5000
   }
   env = [
-    "MONGO_URL=${var.mongo_uri}"
+    "MONGO_URL=${var.mongo_url}"
   ]
 }
 
@@ -43,5 +21,24 @@ resource "docker_container" "frontend" {
   ports {
     internal = 3000
     external = 3000
+  }
+  depends_on = [docker_container.backend]
+}
+
+
+resource "docker_image" "backend" {
+  name = "pro_backend:latest"
+  build {
+    context    = "./../../backend"
+    dockerfile = "Dockerfile"
+  }
+}
+
+
+resource "docker_image" "frontend" {
+  name = "pro_frontend:latest"
+  build {
+    context    = "./../../frontend"
+    dockerfile = "Dockerfile"
   }
 }
