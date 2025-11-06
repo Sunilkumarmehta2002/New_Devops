@@ -90,6 +90,7 @@ rm -f .terraform.lock.hcl
 
 terraform init -reconfigure
 terraform apply -auto-approve -var="mongo_url=$MONGO_URL" -var="dockerhub_username=sunilkumarmehta2002"
+terraform apply -auto-approve -parallelism=2
 
 
 cd ../../
