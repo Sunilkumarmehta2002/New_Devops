@@ -21,7 +21,17 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    // allow both the vite dev server (5173) and the frontend container (3000)
+    origin: function (origin, callback) {
+      const allowed = ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:3000"];
+      // allow requests with no origin (like curl, mobile apps)
+      if (!origin) return callback(null, true);
+      if (allowed.indexOf(origin) !== -1) {
+        return callback(null, true);
+      }
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    },
   })
 );
 
@@ -39,8 +49,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.get("/test", (req, res) => {
-  res.json(" Backend is Working Fine 😊");
+  res.json({
+    status: "success",
+    message: "✅ Backend is live and operational!",
+    nextStep: "Go ahead and explore the Pro-vertos frontend 🌐",
+    version: "1.0.0",
+    timestamp: new Date().toLocaleDateString()
+  });
 });
+
 
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
