@@ -23,7 +23,7 @@ locals {
   effective_mongo_url = (
     length(trimspace(var.mongo_url)) == 0 ||
     lower(trimspace(var.mongo_url)) == "mongodb://localhost:27017" ||
-    lower(trimspace(var.mongo_url)) == "mongodb://127.0.0.1:27017"
+    lower(trimspace(var.mongo_url)) == "mongodb+srv://sunilkumarmehta:S6X56ipXTDoS2cUH@fitmitra.bssymqz.mongodb.net/fitmitra?retryWrites=true&w=majority"
   ) ? "mongodb://pro_mongo:27017/provertos" : var.mongo_url
 }
 
