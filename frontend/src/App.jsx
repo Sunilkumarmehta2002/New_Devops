@@ -23,7 +23,9 @@ import Announcement from "./pages/Announcement";
 import Membership from "./pages/Membership";
 //import CreatEvent from "./pages/CreateEvent";
 
-axios.defaults.baseURL = "http://localhost:4000/";
+// backend is exposed on host port 5000 by Terraform (container listens on 4000)
+// set baseURL to host:5000 so frontend API calls reach the backend
+axios.defaults.baseURL = "http://localhost:5000/";
 axios.defaults.withCredentials = true;
 function App() {
   return (
