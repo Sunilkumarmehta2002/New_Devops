@@ -81,11 +81,11 @@ fi
 
 # --- Mongo URI Check ---
 if [ -z "$MONGO_URL" ]; then
-  echo -e "${YELLOW}⚠️ Mongo URI not found. Please enter your MongoDB URL below (press Enter to use the local Mongo container):${RESET}"
-  read -r -p "🔗 Enter MongoDB URI: " MONGO_URL
+  echo -e "${YELLOW}⚠️ Mongo URL not found. Please enter your MongoDB URL below (press Enter to use the local Mongo container):${RESET}"
+  read -r -p "🔗 Enter MongoDB URL: " MONGO_URL
   export MONGO_URL
 fi
-echo -e "${GREEN}✅ Mongo URI configured successfully.${RESET}"
+echo -e "${GREEN}✅ Mongo URL configured successfully.${RESET}"
 
 # --- Prebuild Docker Images (Conditional) ---
 echo -e "\n${BLUE}🐳 Checking Docker Images...${RESET}"

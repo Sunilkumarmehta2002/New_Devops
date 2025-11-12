@@ -54,7 +54,7 @@ app.get("/test", (req, res) => {
     message: "✅ Backend is live and operational!",
     nextStep: "Go ahead and explore the Pro-vertos frontend 🌐",
     version: "1.0.0",
-    timestamp: new Date().toLocaleDateString()
+    timestamp: new Date().toISOString(),
   });
 });
 
