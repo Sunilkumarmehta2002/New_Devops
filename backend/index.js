@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.get("/test", (req, res) => {
-  res.json("test ok");
+  res.json(" Backend is Working Fine 😊");
 });
 
 app.post("/register", async (req, res) => {

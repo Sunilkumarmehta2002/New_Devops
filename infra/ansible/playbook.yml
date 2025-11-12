@@ -1,30 +1,64 @@
 - name: Deploy Pro-vertos using Docker
   hosts: local
+  vars:
+    backend_image: "provertos_backend:latest"
+    frontend_image: "provertos_frontend:latest"
+    use_registry: false            # if true, pull images from registry instead of building
+    registry_username: "{{ lookup('env','DOCKERHUB_USERNAME') | default('', true) }}"
+    manage_containers_with_terraform: true
+    backend_host_port: 5000
+    backend_container_port: 4000
+    frontend_host_port: 3000
+    frontend_container_port: 3000
+    mongo_url: ""
   tasks:
-    - name: 🧹 Stop old backend container if running
-      command: docker stop provertos_backend
-      ignore_errors: yes
+    - name: Build or pull backend image
+      when: not use_registry
+      command: docker build -t {{ backend_image }} ../../backend
 
-    - name: 🔄 Remove old backend container
-      command: docker rm provertos_backend
-      ignore_errors: yes
+    - name: Pull backend image from registry
+      when: use_registry
+      command: docker pull {{ registry_username }}/{{ backend_image }}
 
-    - name: 🧱 Build backend Docker image
-      command: docker build -t provertos_backend:latest ../../backend
+    - name: Build or pull frontend image
+      when: not use_registry
+      command: docker build -t {{ frontend_image }} ../../frontend
 
-    - name: 🚀 Run backend container
-      command: docker run -d --name provertos_backend -p 5000:5000 -e MONGO_URL={{ lookup('env', 'MONGO_URL') }} provertos_backend:latest
+    - name: Pull frontend image from registry
+      when: use_registry
+      command: docker pull {{ registry_username }}/{{ frontend_image }}
 
-    - name: 🧹 Stop old frontend container if running
-      command: docker stop provertos_frontend
-      ignore_errors: yes
+    - name: Manage containers locally with Terraform (skip lifecycle here)
+      when: manage_containers_with_terraform
+      debug:
+        msg: "Terraform manages containers; skipping run/stop here."
 
-    - name: 🔄 Remove old frontend container
-      command: docker rm provertos_frontend
-      ignore_errors: yes
+    - name: Deploy containers via Ansible (pull & run) when `manage_containers_with_terraform` is false
+      when: not manage_containers_with_terraform
+      block:
+        - name: Stop existing backend container
+          command: docker stop pro_backend || true
 
-    - name: 🧱 Build frontend Docker image
-      command: docker build -t provertos_frontend:latest ../../frontend
+        - name: Remove existing backend container
+          command: docker rm pro_backend || true
 
-    - name: 🚀 Run frontend container
-      command: docker run -d --name provertos_frontend -p 3000:3000 provertos_frontend:latest
+        - name: Run backend container
+          command: >-
+            docker run -d --name pro_backend
+            -p {{ backend_host_port }}:{{ backend_container_port }}
+            --restart unless-stopped
+            -e "MONGO_URL={{ mongo_url }}"
+            {{ registry_username + '/' if use_registry else '' }}{{ backend_image }}
+
+        - name: Stop existing frontend container
+          command: docker stop pro_frontend || true
+
+        - name: Remove existing frontend container
+          command: docker rm pro_frontend || true
+
+        - name: Run frontend container
+          command: >-
+            docker run -d --name pro_frontend
+            -p {{ frontend_host_port }}:{{ frontend_container_port }}
+            --restart unless-stopped
+            {{ registry_username + '/' if use_registry else '' }}{{ frontend_image }}
